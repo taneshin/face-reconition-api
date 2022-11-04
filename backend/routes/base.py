@@ -4,4 +4,4 @@ from fastapi import APIRouter
 
 api_router = APIRouter()
 
-api_router.include_router(route_recognition.router, prefix="/recognition", tags=["recognition"])
+api_router.include_router(route_recognition.router, prefix="", tags=["recognition"])

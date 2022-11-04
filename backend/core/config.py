@@ -9,7 +9,7 @@ load_dotenv(dotenv_path=env_path)
 
 class Settings:
     PROJECT_NAME: str = "face-recognition"
-    PROJECT_VERSION: str = "1.0.0"
+    PROJECT_VERSION: str = "2.0.0"
 
     # USE_SQLITE_DB: str = os.getenv("USE_SQLITE_DB")
     # POSTGRES_USER: str = os.getenv("POSTGRES_USER")
