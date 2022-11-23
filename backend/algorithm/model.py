@@ -1,5 +1,6 @@
 import dlib
 import cv2
+import logging
 import numpy as np
 import pickle
 from algorithm.utils import read_pickle
@@ -77,6 +78,7 @@ def face_predict(image, threshold=0.6):
     return name, e_dist
 
 def add_face_to_model(name, image_files):
+    stats = [[],[]]
     try:
         name_encodings_dict = read_pickle()
     except:
@@ -87,7 +89,14 @@ def add_face_to_model(name, image_files):
         print(f"Image processed {nb_current_image}/{len(image_files)} for {name}")
         npimg = np.frombuffer(image_file.file.read(), np.uint8)
         image = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
-        encodings = face_encodings(image)
+        try:
+            encodings = face_encodings(image)
+        except HTTPException as e:
+            stats[1].append((image_file.filename,e.detail))
+            logging.warning(f'{image_file.filename} has an error \"{e.detail}\"')
+            continue
+        else:
+            stats[0].append(image_file.filename)
         e = name_encodings_dict.get(name, [])
         e.append(encodings)
         name_encodings_dict[name] = e
@@ -95,6 +104,8 @@ def add_face_to_model(name, image_files):
 
     with open("algorithm/encodings.pickle", "wb") as f:
         pickle.dump(name_encodings_dict, f)
+    
+    return stats
 
 def prepare_initial_bulk_pickle(data_folder_path):
     dirs = os.listdir(data_folder_path)
