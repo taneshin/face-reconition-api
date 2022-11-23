@@ -35,7 +35,7 @@ uvicorn main:app
 <br>JSON response with the filenames of successfully added and rejected images
 
 ## Models used:
-1. Facial detection - [Yunet](https://medium.com/@silkworm/yunet-ultra-high-performance-face-detection-in-opencv-a-good-solution-for-real-time-poc-b01063e251d5)
+1. Facial detection - [YuNet](https://medium.com/@silkworm/yunet-ultra-high-performance-face-detection-in-opencv-a-good-solution-for-real-time-poc-b01063e251d5)
 2. Facial alignment - [Dlib's 68 point face landmark predictor](http://dlib.net/face_landmark_detection.py.html)
 3. Facial encoding - [Dlib's ResNet-34 inspired model](https://paperswithcode.com/paper/dlib-ml-a-machine-learning-toolkit)
 
