@@ -17,21 +17,28 @@ async def delete_model():
     delete_pickle()
     return {"msg": "Successfully deleted."}
 
-@router.post('/predict')
+@router.post('/find')
 async def predict_face(file: UploadFile):
     npimg = np.frombuffer(await file.read(), np.uint8)
     identity, distance = face_predict(cv2.imdecode(npimg, cv2.IMREAD_COLOR))
-    return {"identity": identity,
-            "euclidean distance": round(distance, 2)}
+    return {"identity": identity
+            , "distance": distance
+            , "similarity_metric": "euclidean"
+            }
 
-@router.post('/authenticate')
-async def authenticate(name: str, file: UploadFile, threshold: float = 0.6):
+@router.post('/verify ')
+async def authenticate(name: str, file: UploadFile, max_threshold_to_verify: float = 0.6):
     npimg = np.frombuffer(await file.read(), np.uint8)
-    identity, _ = face_predict(cv2.imdecode(npimg, cv2.IMREAD_COLOR), threshold)
-    return {"check": identity == name}
+    identity, distance = face_predict(cv2.imdecode(npimg, cv2.IMREAD_COLOR), threshold)
+
+    return {"verified": identity == name
+            , "score": score
+            , "distance": distance
+            }
 
 @router.post('/add', status_code=HTTP_201_CREATED)
 async def add_new_person(name: str, files: List[UploadFile]):
     added, rejected = add_face_to_model(name, files)
-    return {"added": added,
-            "rejected": rejected}
+    return {"added": added
+            , "rejected": rejected
+            }
